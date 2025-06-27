@@ -1,4 +1,5 @@
 # Attack Simulation Tool
+![image](https://github.com/user-attachments/assets/1f61574a-71db-4e59-950e-01088a7efc3f)
 
 This project provides a PowerShell script to simulate various attack commands and generate a comprehensive HTML report of the simulation results. It's designed to help security professionals and system administrators test their defenses against common attack techniques and identify potential vulnerabilities.
 
