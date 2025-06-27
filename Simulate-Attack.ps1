@@ -292,7 +292,7 @@ function ConvertTo-SimulationReportHtml {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛡️ Attack Simulation Report</h1>
+            <h1>Attack Simulation Report</h1>
             <p>Generated on $timestamp</p>
         </div>
 
