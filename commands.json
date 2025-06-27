@@ -1,0 +1,94 @@
+[
+    {
+        "Command": "net group \"Domain Admins\" /domain",
+        "Description": "Enumerate Domain Admins group members.",
+        "Severity": "Low",
+        "MitreAttackTag": "T1069.002 - Permission Groups Discovery: Domain Groups"
+    },
+    {
+        "Command": "net user newadmin P@ssw0rd123 /add /domain",
+        "Description": "Attempt to add a new domain user. (Expected to fail without proper permissions)",
+        "Severity": "High",
+        "MitreAttackTag": "T1136.001 - Create Account: Local Account"
+    },
+    {
+        "Command": "net group \"Domain Admins\" newadmin /add /domain",
+        "Description": "Attempt to add a new user to Domain Admins. (Expected to fail without proper permissions)",
+        "Severity": "Critical",
+        "MitreAttackTag": "T1098 - Account Manipulation"
+    },
+    {
+        "Command": "whoami /groups",
+        "Description": "Display current user's security groups.",
+        "Severity": "Informational",
+        "MitreAttackTag": "T1033 - System Owner/User Discovery"
+    },
+    {
+        "Command": "ipconfig /all",
+        "Description": "Display full TCP/IP configuration information.",
+        "Severity": "Informational",
+        "MitreAttackTag": "T1016 - System Network Configuration Discovery"
+    },
+    {
+        "Command": "tasklist",
+        "Description": "List running processes.",
+        "Severity": "Informational",
+        "MitreAttackTag": "T1057 - Process Discovery"
+    },
+    {
+        "Command": "query user",
+        "Description": "Display information about users logged on to the system.",
+        "Severity": "Informational",
+        "MitreAttackTag": "T1033 - System Owner/User Discovery"
+    },
+    {
+        "Command": "systeminfo",
+        "Description": "Display system information.",
+        "Severity": "Informational",
+        "MitreAttackTag": "T1082 - System Information Discovery"
+    },
+    {
+        "Command": "wmic product get name,version",
+        "Description": "List installed software.",
+        "Severity": "Informational",
+        "MitreAttackTag": "T1518.001 - Software Discovery: Security Software Discovery"
+    },
+    {
+        "Command": "powershell -command \"Get-ChildItem C:\\Users\\ -Recurse -Include *.txt -ErrorAction SilentlyContinue\"",
+        "Description": "Search for text files in user directories.",
+        "Severity": "Low",
+        "MitreAttackTag": "T1083 - File and Directory Discovery"
+    },
+    {
+        "Command": "cmd.exe /c echo hello > C:\\Windows\\Temp\\test.txt",
+        "Description": "Create a file using cmd.exe",
+        "Severity": "Low",
+        "MitreAttackTag": "T1059.003 - Command and Scripting Interpreter: Windows Command Shell"
+    },
+    {
+        "Command": "certutil.exe -urlcache -split -f http://www.google.com/index.html C:\\Windows\\Temp\\google.html",
+        "Description": "Download a file using certutil.exe",
+        "Severity": "Medium",
+        "MitreAttackTag": "T1105 - Ingress Tool Transfer"
+    },
+    {
+        "Command": "wmic process call create \"notepad.exe\"",
+        "Description": "Create a process using wmic",
+        "Severity": "Medium",
+        "MitreAttackTag": "T1047 - Windows Management Instrumentation"
+    },
+    {
+        "Command": "python -c \"import os; os.system(\'whoami\')\"",
+        "Description": "Execute a command using python",
+        "Severity": "Low",
+        "MitreAttackTag": "T1059.006 - Command and Scripting Interpreter: Python"
+    },
+    {
+        "Command": "powershell -command \"Start-Process chrome.exe -ArgumentList \'--new-window www.google.com\'\"",
+        "Description": "Launch Chrome to a specific URL",
+        "Severity": "Informational",
+        "MitreAttackTag": "T1059 - Command and Scripting Interpreter"
+    }
+]
+
+
