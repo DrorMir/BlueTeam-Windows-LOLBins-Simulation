@@ -1,5 +1,4 @@
 import os #path
-from pathlib import Path
 
 import repo_parser
 import repo_importer
@@ -13,5 +12,8 @@ class CommandUpdater:
 
     def import_repo(self, repo_url, repo_name):
         repo_importer.RepoImporter(self._curr_dir, repo_url, repo_name)
+
+    def parse_repo(self, repo_name):
+        repo_parser.RepoParser(f"{self._curr_dir}/{repo_name}")
 
                 
