@@ -14,13 +14,27 @@ class RepoParser:
                         with open(file_path, 'r', encoding='utf-8') as f:
                             content = yaml.safe_load(f)
 
-                        if isinstance(content, list):
-                            for technique in content:
-                                commands = technique.get("Commands", [])
-                                for command in commands:
-                                    self._commands.append((file.replace(".yml", ""), command))
+                        if isinstance(content, dict) and "Commands" in content:
+                            for command in content["Commands"]:
+                                mitre_id = command.get("MitreID", "N/A")
+                                if isinstance(mitre_id, list):
+                                    mitre_id = mitre_id[0]
+
+                                # Check for 'Severity' field, if not present, assign a default or skip
+                                severity = command.get("Severity", "Informational") # Default to Informational
+
+                                if all(k in command for k in ["Command", "Description"]):
+                                    self._commands.append({
+                                        "Command": command["Command"],
+                                        "Description": command["Description"],
+                                        "Severity": severity,
+                                        "MitreAttackTag": mitre_id
+                                    })
+                                else:
+                                    print(f"[!] Skipping malformed command in {file_path}: {command}")
 
                     except Exception as e:
                         print(f"[!] Failed to parse {file_path}: {e}")
         
-        print(self._commands)
+    def get_commands(self):
+        return self._commands
