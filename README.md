@@ -5,8 +5,8 @@ This project provides a PowerShell script to simulate various attack commands an
 
 ## Features
 
-- **Configurable Attack Scenarios**: Define a list of commands to simulate in a JSON configuration file, which can be populated from external repositories.
-- **Repository Integration**: Easily import and parse attack commands from external YAML-based repositories (e.g., LOLBAS Project).
+- **Automated Command Extraction**: Automatically extracts attack commands from the LOLBAS project (Living Off The Land Binaries and Scripts) YAML files, categorizing them by Command, Description, Severity, and MITRE ATT&CK Tag.
+- **Configurable Attack Scenarios**: Define a list of commands to simulate in a JSON configuration file (`commands.json`). This file is automatically populated from the LOLBAS project data.
 - **Detailed Reporting**: Generates an interactive HTML report with:
     - Overall success/failure statistics.
     - Filterable table of individual command execution results.
@@ -18,59 +18,42 @@ This project provides a PowerShell script to simulate various attack commands an
 
 ### Prerequisites
 
-- PowerShell 5.1 or higher (Windows 10/Server 2016 and later usually have this by default).
+- PowerShell 7 or higher (PowerShell Core).
 - Python 3.x
-- Git (for cloning repositories)
+- Git (for cloning the LOLBAS project)
 
 ### Installation
 
-1.  Clone this repository:
-    ```bash
-    git clone <your-repo-url>
-    cd attack-simulation-tool
-    ```
-2.  Install Python dependencies:
-    ```bash
-    pip install PyYAML GitPython
-    ```
+1. Clone the LOLBAS project repository:
+   ```bash
+   git clone https://github.com/LOLBAS-Project/LOLBAS-Project.git
+   ```
+2. Install Python dependencies:
+   ```bash
+   pip install pyyaml GitPython
+   ```
 
 ## Usage
 
-### Populating `commands.json`
+First, run the `main.py` script to parse the LOLBAS project and populate `commands.json`:
 
-The `commands.json` file, which defines the commands for simulation, can be populated by parsing external repositories. The `main.py` script handles this process.
-
-1.  **Import and Parse a Repository**: 
-    Edit `main.py` to uncomment and configure the `CU.import_repo` and `CU.parse_repo` calls. For example, to import and parse the LOLBAS Project:
-    ```python
-    import command_updater
-
-    if __name__ == "__main__":
-        CU = command_updater.CommandUpdater()
-        CU.import_repo("https://github.com/LOLBAS-Project/LOLBAS", "LOLBAS-project") # Import LOLBAS repo
-        CU.parse_repo("LOLBAS-project") # Parse the imported repo and update commands.json
-    ```
-    Run the `main.py` script:
-    ```bash
-    python main.py
-    ```
-    This will clone the specified repository into your project directory (if not already present), pull the latest changes, and then parse its YAML files to extract commands, saving them into `commands.json`.
-
-### Running the Attack Simulation
+```bash
+python3 main.py
+```
 
 To run the attack simulation, execute the PowerShell script:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\Simulate-Attack.ps1
+pwsh -ExecutionPolicy Bypass -File .\Simulate-Attack.ps1
 ```
 
-By default, the script will look for `commands.json` in the same directory as `Simulate-Attack.ps1` and generate `simulation_report.html` in `c:\`.
+By default, the script will look for `commands.json` in the same directory and generate `simulation_report.html` in `c:\`.
 
 ### Parameters
 
 You can specify custom paths for the configuration and output files:
 
-- `-ConfigPath <path>`: Specifies the path to the JSON configuration file (default: `commands.json` in the script's directory).
+- `-ConfigPath <path>`: Specifies the path to the JSON configuration file (default: `c:/commands.json`).
 - `-OutputPath <path>`: Specifies the path where the HTML report will be saved (default: `c:/simulation_report.html`).
 
 Example:
@@ -103,19 +86,67 @@ The `commands.json` file defines the commands to be simulated. Each entry in the
 }
 ```
 
+## GUI Interface
+
+The project now includes a user-friendly GUI for adding and managing custom commands without manually editing JSON files.
+
+### GUI Features
+
+- **Intuitive Command Input**: Easy-to-use form for adding new commands with fields for:
+  - Command string
+  - Description
+  - Severity level (dropdown selection)
+  - MITRE ATT&CK technique tag
+- **Command Management**: View, edit, and delete existing commands in a sortable table
+- **Color-coded Severity**: Visual indicators for command severity levels
+- **File Operations**: Load, save, and export command sets
+- **Integration**: Seamlessly works with existing `commands.json` format
+
+### Running the GUI
+
+#### Prerequisites for GUI
+
+```bash
+pip install PyQt6
+```
+
+On Linux systems, you may also need:
+```bash
+sudo apt-get install -y libxcb-cursor0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-shape0
+```
+
+#### Starting the GUI
+
+Use the launcher script (recommended):
+```bash
+python3 gui.py
+```
+
+Or run directly:
+```bash
+python3 command_add_gui.py
+```
+
+### GUI Usage
+
+1. **Adding Commands**: Fill out the form on the left side and click "Add Command"
+2. **Managing Commands**: Use the table on the right to view, sort, and delete commands
+3. **File Operations**: Use the buttons at the bottom to save, load, or export command sets
+4. **Integration**: The GUI automatically loads and saves to `commands.json` for seamless integration with the PowerShell simulator
+
 ## Report Structure
 
 The generated `simulation_report.html` provides an overview of the simulation and detailed results for each command.
 
--   **Header**: Displays the report title and generation timestamp.
--   **Statistics**: Summary of total tests, succeeded, failed, and success rate.
--   **Filters**: Buttons to filter results by status (All, Success, Failure) and severity (Critical, High).
--   **Results Table**: A sortable table with the following columns:
-    -   **Command**: The executed command.
-    -   **Description**: Description of the command.
-    -   **Severity**: Severity level of the command.
-    -   **MITRE ATT&CK**: Associated MITRE ATT&CK technique.
-    -   **Status**: Indicates whether the command succeeded or failed.
-    -   **Error Message**: Details of any error encountered during execution.
+- **Header**: Displays the report title and generation timestamp.
+- **Statistics**: Summary of total tests, succeeded, failed, and success rate.
+- **Filters**: Buttons to filter results by status (All, Success, Failure) and severity (Critical, High).
+- **Results Table**: A sortable table with the following columns:
+    - **Command**: The executed command.
+    - **Description**: Description of the command.
+    - **Severity**: Severity level of the command.
+    - **MITRE ATT&CK**: Associated MITRE ATT&CK technique.
+    - **Status**: Indicates whether the command succeeded or failed.
+    - **Error Message**: Details of any error encountered during execution.
 
 
