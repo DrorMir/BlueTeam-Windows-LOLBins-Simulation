@@ -86,54 +86,6 @@ The `commands.json` file defines the commands to be simulated. Each entry in the
 }
 ```
 
-## GUI Interface
-
-The project now includes a user-friendly GUI for adding and managing custom commands without manually editing JSON files.
-
-### GUI Features
-
-- **Intuitive Command Input**: Easy-to-use form for adding new commands with fields for:
-  - Command string
-  - Description
-  - Severity level (dropdown selection)
-  - MITRE ATT&CK technique tag
-- **Command Management**: View, edit, and delete existing commands in a sortable table
-- **Color-coded Severity**: Visual indicators for command severity levels
-- **File Operations**: Load, save, and export command sets
-- **Integration**: Seamlessly works with existing `commands.json` format
-
-### Running the GUI
-
-#### Prerequisites for GUI
-
-```bash
-pip install PyQt6
-```
-
-On Linux systems, you may also need:
-```bash
-sudo apt-get install -y libxcb-cursor0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-shape0
-```
-
-#### Starting the GUI
-
-Use the launcher script (recommended):
-```bash
-python3 gui.py
-```
-
-Or run directly:
-```bash
-python3 command_add_gui.py
-```
-
-### GUI Usage
-
-1. **Adding Commands**: Fill out the form on the left side and click "Add Command"
-2. **Managing Commands**: Use the table on the right to view, sort, and delete commands
-3. **File Operations**: Use the buttons at the bottom to save, load, or export command sets
-4. **Integration**: The GUI automatically loads and saves to `commands.json` for seamless integration with the PowerShell simulator
-
 ## Report Structure
 
 The generated `simulation_report.html` provides an overview of the simulation and detailed results for each command.
